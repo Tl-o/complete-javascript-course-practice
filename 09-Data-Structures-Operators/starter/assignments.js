@@ -351,15 +351,13 @@ const books = [
 //   typeof author === 'string' && allAuthors.push(author);
 // }
 
-// console.log(allAuthors);
+console.log(allAuthors);
 
-// Enhanced Object Literals
-// 9.2
-// const bookData = [
-//   ['title', 'Computer Networking: A Top-Down Approach'],
-//   ['author', ['James F. Kurose', 'Keith W. Ross']],
-//   ['publisher', 'Addison Wesley'],
-// ];
+const bookData = [
+  ['title', 'Computer Networking: A Top-Down Approach'],
+  ['author', ['James F. Kurose', 'Keith W. Ross']],
+  ['publisher', 'Addison Wesley'],
+];
 
 // const newBook = {
 //   [bookData[0][0]]: [bookData[0][1]],
@@ -367,56 +365,54 @@ const books = [
 //   [bookData[2][0]]: [bookData[2][1]],
 // };
 
-// console.log(newBook);
+console.log(newBook);
 
-// Optional Chaining
-// 10.1
-// function getFirstKeyword(book) {
-//   console.log(book.keywords?.[0]);
-// }
+10.1;
+function getFirstKeyword(book) {
+  console.log(book.keywords?.[0]);
+}
 
-// getFirstKeyword(books[7]);
-// getFirstKeyword(books[6]);
-// getFirstKeyword(books[5]);
-// getFirstKeyword(books[4]);
-// getFirstKeyword(books[3]);
-// getFirstKeyword(books[2]);
-// getFirstKeyword(books[1]);
-// getFirstKeyword(books[0]);
+getFirstKeyword(books[7]);
+getFirstKeyword(books[6]);
+getFirstKeyword(books[5]);
+getFirstKeyword(books[4]);
+getFirstKeyword(books[3]);
+getFirstKeyword(books[2]);
+getFirstKeyword(books[1]);
+getFirstKeyword(books[0]);
 
-// Looping Objects
 // 11.1
-// const entries = [];
+const entries = [];
 
-// for (const key of Object.keys(books[0].thirdParty.goodreads))
-//   entries.push([key]);
+for (const key of Object.keys(books[0].thirdParty.goodreads))
+  entries.push([key]);
 
 // // 11.2
 
-// for (const [index, value] of Object.values(
-//   books[0].thirdParty.goodreads
-// ).entries()) {
-//   entries[index].push(value);
-// }
+for (const [index, value] of Object.values(
+  books[0].thirdParty.goodreads
+).entries()) {
+  entries[index].push(value);
+}
 
-// const entries2 = Object.entries(books[0].thirdParty.goodreads);
+const entries2 = Object.entries(books[0].thirdParty.goodreads);
 
 // Maps: Fundamentals
 
-// const newBook = new Map([
-//   ['title', 'Clean Code'],
-//   ['author', 'Robert C. Martin'],
-// ]);
+const newBook = new Map([
+  ['title', 'Clean Code'],
+  ['author', 'Robert C. Martin'],
+]);
 
-// newBook.set('pages', 464);
-// console.log(`${newBook.get('title')} by ${newBook.get('author')}`);
+newBook.set('pages', 464);
+console.log(`${newBook.get('title')} by ${newBook.get('author')}`);
 
 // Maps : Iteration
-// const firstBookMap = new Map(Object.entries(books[0]));
-// console.log(firstBookMap);
+const firstBookMap = new Map(Object.entries(books[0]));
+console.log(firstBookMap);
 
-// for (const [key, value] of firstBookMap)
-//   typeof value === 'number' && console.log(key);
+for (const [key, value] of firstBookMap)
+  typeof value === 'number' && console.log(key);
 
 // Bonus Assignment, Strings
 const hideCard = function (card) {

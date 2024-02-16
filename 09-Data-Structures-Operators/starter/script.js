@@ -27,3 +27,9 @@ const restaurant = {
     },
   },
 };
+
+const greeting = greeting => {
+  return name => console.log(`${greeting} ${name}`);
+};
+
+greeting('Hey there, ')('Talal!');
