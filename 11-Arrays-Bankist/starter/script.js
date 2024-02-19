@@ -71,7 +71,7 @@ const displayMovements = function (movements) {
       <div class="movements__type movements__type--${status}">${
       i + 1
     } ${status}</div>
-      <div class="movements__value">4 000€</div>
+      <div class="movements__value">${move}€</div>
     </div>
     `;
 
