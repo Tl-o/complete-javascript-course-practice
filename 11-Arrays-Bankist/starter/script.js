@@ -61,8 +61,12 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements) {
+// Current User Data
+let currAccount, currBalance;
+
+const displayMovements = function (acc) {
   containerMovements.innerHTML = ''; // Clear HTML.
+  const movements = acc.movements;
 
   movements.forEach(function (move, i) {
     const status = move > 0 ? 'deposit' : 'withdrawal';
@@ -79,8 +83,6 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
-
 const computerUsernames = function (accs) {
   accs.forEach(acc => {
     acc.username = acc.owner
@@ -91,11 +93,13 @@ const computerUsernames = function (accs) {
   });
 };
 
-const computeBalance = function (moves) {
-  labelBalance.textContent = moves.reduce((acc, val) => acc + val) + '€';
+const computeBalance = function (acc) {
+  currBalance = acc.movements.reduce((acc, val) => acc + val, 0);
+  labelBalance.textContent = `${currBalance}€`;
 };
 
-const computeSummary = function (moves) {
+const computeSummary = function (acc) {
+  const moves = acc.movements;
   const sumIn = moves
     .filter(pos => pos > 0)
     .reduce((total, curr) => (total += curr));
@@ -108,14 +112,50 @@ const computeSummary = function (moves) {
 
   const interest = moves
     .filter(pos => pos > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .reduce((total, curr) => (total += curr));
   labelSumInterest.textContent = `${interest}€`;
 };
 
+const updateUI = function () {
+  computeBalance(currAccount);
+  computeSummary(currAccount);
+  displayMovements(currAccount);
+};
+
 computerUsernames(accounts);
-computeBalance(account1.movements);
-computeSummary(account1.movements);
+
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  currAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
+  if (!(currAccount?.pin === Number(inputLoginPin.value))) return;
+
+  inputLoginPin.value = inputLoginUsername.value = '';
+  inputLoginPin.blur();
+  inputLoginUsername.blur();
+  labelWelcome.textContent = `Welcome, ${currAccount.owner}!`;
+  containerApp.style.opacity = 1;
+  updateUI();
+});
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  // Check if account exists, and if balance is there.
+  let transferTo = accounts.find(acc => acc.username === inputTransferTo.value);
+  let amount = Number(inputTransferAmount.value);
+  if (!(transferTo && transferTo !== currAccount && currBalance >= amount))
+    return;
+
+  inputTransferTo.value = inputTransferAmount.value = '';
+  inputTransferTo.blur();
+  inputTransferAmount.blur();
+  currAccount.movements.push(-amount);
+  transferTo.movements.push(amount);
+
+  updateUI();
+});
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
