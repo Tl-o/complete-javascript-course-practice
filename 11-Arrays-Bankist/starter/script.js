@@ -81,6 +81,42 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
+const computerUsernames = function (accs) {
+  accs.forEach(acc => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(value => value.charAt(0))
+      .join('');
+  });
+};
+
+const computeBalance = function (moves) {
+  labelBalance.textContent = moves.reduce((acc, val) => acc + val) + '€';
+};
+
+const computeSummary = function (moves) {
+  const sumIn = moves
+    .filter(pos => pos > 0)
+    .reduce((total, curr) => (total += curr));
+  labelSumIn.textContent = `${sumIn}€`;
+
+  const sumOut = moves
+    .filter(neg => neg < 0)
+    .reduce((total, curr) => (total += curr));
+  labelSumOut.textContent = `${Math.abs(sumOut)}€`;
+
+  const interest = moves
+    .filter(pos => pos > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .reduce((total, curr) => (total += curr));
+  labelSumInterest.textContent = `${interest}€`;
+};
+
+computerUsernames(accounts);
+computeBalance(account1.movements);
+computeSummary(account1.movements);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
