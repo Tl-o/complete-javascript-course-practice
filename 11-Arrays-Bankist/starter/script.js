@@ -62,13 +62,17 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // Current User Data
-let currAccount, currBalance;
+let currAccount,
+  currBalance,
+  sort = false;
 
-const displayMovements = function (acc) {
+const displayMovements = function (acc, srt = false) {
   containerMovements.innerHTML = ''; // Clear HTML.
-  const movements = acc.movements;
+  const move = srt
+    ? acc.movements.slice().sort((a, b) => a - b)
+    : acc.movements;
 
-  movements.forEach(function (move, i) {
+  move.forEach(function (move, i) {
     const status = move > 0 ? 'deposit' : 'withdrawal';
     const movementHTML = `
     <div class="movements__row">
@@ -156,6 +160,76 @@ btnTransfer.addEventListener('click', function (e) {
 
   updateUI();
 });
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  // Check if loan amount is bigger
+  const loanAmount = Number(inputLoanAmount.value);
+  const approved = currAccount.movements.some(
+    movement => movement >= loanAmount * 0.1
+  );
+  if (!approved || !(loanAmount > 0)) return;
+
+  inputLoanAmount.value = 0;
+  inputLoanAmount.blur;
+  currAccount.movements.push(loanAmount);
+  updateUI();
+});
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    // If credentials are wrong, return.
+    !(
+      currAccount.username === inputCloseUsername.value &&
+      currAccount.pin === Number(inputClosePin.value)
+    )
+  )
+    return;
+
+  // Delete user.
+  inputClosePin.value = inputCloseUsername.value = '';
+  accounts.splice(
+    accounts.findIndex(acc => acc.username === currAccount.username),
+    1
+  );
+
+  // Hide UI & change login message.
+  containerApp.style.opacity = 0;
+  labelWelcome.textContent = 'Log in to get started';
+});
+
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  sort = !sort;
+  console.log(sort);
+  displayMovements(currAccount, sort);
+});
+
+labelBalance.addEventListener('click', function () {
+  const movementsArr = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.slice(0, -1))
+  );
+  console.log(movementsArr);
+});
+
+const convertTitleCase = function (title) {
+  const exceptions = ['a', 'an', 'the', 'but', 'or', 'on', 'in', 'with'];
+
+  const strArray = title.toLowerCase().split(' ');
+  const result = strArray
+    .map(word =>
+      exceptions.includes(word) ? word : word[0].toUpperCase() + word.slice(1)
+    )
+    .join(' ');
+  return result;
+};
+
+convertTitleCase('this is a LONG title but not too long');
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
